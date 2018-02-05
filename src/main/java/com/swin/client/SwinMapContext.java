@@ -1,13 +1,11 @@
-package com.swin.open;
+package com.swin.client;
 
 import com.alibaba.fastjson.JSON;
 import com.swin.bean.MapData;
 import com.swin.bean.Message;
 import com.swin.bean.MsgAnswer;
-import com.swin.constant.MessageIdentify;
 import com.swin.exception.ParamException;
 import com.swin.exception.UnknownException;
-import com.swin.manager.ConditionLock;
 import com.swin.utils.CoderUtils;
 import io.netty.channel.Channel;
 
@@ -19,7 +17,7 @@ public class SwinMapContext extends SwinContext {
     public boolean putMessage(String tree, String key, Object value) throws Exception {
         if (tree != null && key != null && value != null) {
             Message message = new Message();
-            message.setClientId(clientName);
+            message.setClientId("map_" + clientId);
             message.setIdentify(MessageIdentify.PUT_TREE_MAP_DATA);
             MapData data = new MapData();
             data.setTree(tree);
@@ -27,7 +25,7 @@ public class SwinMapContext extends SwinContext {
             data.setValue(JSON.toJSONString(value).getBytes(CoderUtils.STR_CODE));
             message.setData(data);
             channel.writeAndFlush(message);
-            MsgAnswer answer = (MsgAnswer) ConditionLock.getInstance().await(message.getUuid(), timeout);
+            MsgAnswer answer = (MsgAnswer) ConditionLock.await(message.getUuid(), timeout);
             if (answer.getMessage() != null) {
                 throw new UnknownException(answer.getMessage());
             } else {
@@ -41,14 +39,14 @@ public class SwinMapContext extends SwinContext {
     public Object getMessage(String tree, String key) throws Exception {
         if (tree != null && key != null) {
             Message message = new Message();
-            message.setClientId(clientName);
+            message.setClientId("map_" + clientId);
             message.setIdentify(MessageIdentify.GET_TREE_MAP_DATA);
             MapData data = new MapData();
-            data.setTree(tree);
+            data.setTree("map_" + tree);
             data.setKey(key);
             message.setData(data);
             channel.writeAndFlush(message);
-            MsgAnswer answer = (MsgAnswer) ConditionLock.getInstance().await(message.getUuid(), timeout);
+            MsgAnswer answer = (MsgAnswer) ConditionLock.await(message.getUuid(), timeout);
             if (answer.getMessage() != null) {
                 throw new UnknownException(answer.getMessage());
             } else {

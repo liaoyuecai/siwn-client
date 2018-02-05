@@ -1,17 +1,14 @@
-package com.swin.client.factory;
+package com.swin.client;
 
 import com.swin.bean.MapData;
 import com.swin.bean.Message;
-import com.swin.constant.MessageIdentify;
 import com.swin.utils.CoderUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
 
-import java.nio.charset.Charset;
-
-public class MessageEncoder extends MessageToByteEncoder<Object> {
+class MessageEncoder extends MessageToByteEncoder<Object> {
     @Override
     protected void encode(ChannelHandlerContext channelHandlerContext, Object o, ByteBuf out) throws Exception {
         if (o instanceof Message) {

@@ -1,12 +1,9 @@
-package com.swin.client.factory;
+package com.swin.client;
 
-import com.swin.bean.ConnectAck;
 import com.swin.bean.MapData;
 import com.swin.bean.Message;
 import com.swin.bean.MsgAnswer;
-import com.swin.constant.MessageIdentify;
 import com.swin.exception.ConnectionException;
-import com.swin.manager.ConditionLock;
 import com.swin.utils.CoderUtils;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -75,7 +72,7 @@ public class MessageHandler extends ChannelInboundHandlerAdapter {
         } else {
             answer = new MsgAnswer(result, null, null);
         }
-        ConditionLock.getInstance().release(id, answer);
+        ConditionLock.release(id, answer);
     }
 
     @Override

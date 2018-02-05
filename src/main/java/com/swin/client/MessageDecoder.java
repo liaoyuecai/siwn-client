@@ -1,8 +1,7 @@
-package com.swin.client.factory;
+package com.swin.client;
 
 import com.swin.bean.MapData;
 import com.swin.bean.Message;
-import com.swin.constant.MessageIdentify;
 import com.swin.utils.CoderUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -10,7 +9,7 @@ import io.netty.handler.codec.ByteToMessageDecoder;
 
 import java.util.List;
 
-public class MessageDecoder extends ByteToMessageDecoder {
+class MessageDecoder extends ByteToMessageDecoder {
 
 
     @Override

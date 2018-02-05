@@ -1,7 +1,6 @@
 package com.swin.client;
 
 
-import com.swin.manager.ConditionLock;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.*;
@@ -16,7 +15,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
-public class TcpClientStarter {
+class TcpClientStarter {
     private static final Logger logger = LoggerFactory.getLogger(TcpClientStarter.class);
 
     private ThreadPoolTaskExecutor executor;
@@ -33,7 +32,7 @@ public class TcpClientStarter {
 
     private boolean runStatus;
 
-    public TcpClientStarter(ThreadPoolTaskExecutor executor, String host, Integer port) {
+    TcpClientStarter(ThreadPoolTaskExecutor executor, String host, Integer port) {
         this.executor = executor;
         this.host = host;
         this.port = port;
@@ -41,7 +40,7 @@ public class TcpClientStarter {
 
     private final EventLoopGroup group = new NioEventLoopGroup((Runtime.getRuntime().availableProcessors() / 3));
 
-    public void startClient(String clientName, final ChannelInitializer channelInitializer) {
+    void startClient(String clientName, final ChannelInitializer channelInitializer) {
         executor.submit(new Callable<Object>() {
             public Object call() throws Exception {
                 try {
@@ -57,7 +56,7 @@ public class TcpClientStarter {
                     channelFuture = client.connect(host, port).sync();
                     channel = channelFuture.channel();
                     runStatus = true;
-                    ConditionLock.getInstance().release(clientName + "_start",channel);
+                    ConditionLock.release(clientName + "_start",channel);
                     channelFuture.channel().closeFuture().sync();
                 } catch (Exception e) {
                     logger.error("Client server exception", e);

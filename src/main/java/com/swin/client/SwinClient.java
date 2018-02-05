@@ -1,15 +1,8 @@
 package com.swin.client;
 
-import com.swin.client.factory.MessageDecoder;
-import com.swin.client.factory.MessageEncoder;
-import com.swin.client.factory.MessageHandler;
 import com.swin.exception.ConditionTaskException;
 import com.swin.exception.ConditionTimeoutException;
 import com.swin.exception.IdentificationException;
-import com.swin.manager.ConditionLock;
-import com.swin.open.SwinContext;
-import com.swin.open.SwinMapContext;
-import com.swin.open.SwinQueueContext;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;
@@ -86,7 +79,7 @@ public class SwinClient {
         starter.startClient(clientName, channelInitializer);
         Channel channel = null;
         try {
-            channel = (Channel) ConditionLock.getInstance().await(clientName + "_start", 30000);
+            channel = (Channel) ConditionLock.await(clientName + "_start", 30000);
         } catch (ConditionTaskException e) {
             throw new IdentificationException("Maybe you have the client of the same name");
         } catch (ConditionTimeoutException e) {
